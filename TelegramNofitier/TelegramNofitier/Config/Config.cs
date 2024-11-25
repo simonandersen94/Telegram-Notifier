@@ -13,7 +13,7 @@ namespace TelegramNofitier.Config {
         public string? RabbitMQ_RoutingKey { get; set; }
         public string? RabbitMQ_QueueName { get; set; }
 
-        private static readonly string ConfigPath = Path.Combine(Directory.GetCurrentDirectory(), "Config\\Config.json");
+        private static readonly string ConfigPath = Path.Combine(Directory.GetCurrentDirectory(), "Config/Config.json");
 
         public static Config LoadConfig() {
             if (!File.Exists(ConfigPath)) {
