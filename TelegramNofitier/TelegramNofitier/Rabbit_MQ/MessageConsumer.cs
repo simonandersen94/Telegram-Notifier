@@ -6,9 +6,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TelegramNofitier.Config;
+using TelegramNofitier.RabbitMQ.Interfaces;
 
 namespace TelegramNofitier.RabbitMQ {
-    public class MessageConsumer {
+    public class MessageConsumer : IMessageConsumer {
         private readonly RabbitMQService _rabbitMQService;
         private readonly Config.Config _config;
 
