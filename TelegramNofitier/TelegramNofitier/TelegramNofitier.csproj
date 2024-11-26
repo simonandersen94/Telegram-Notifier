@@ -13,6 +13,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="RabbitMQ.Client" Version="6.8.1" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Update="Config\Config.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
