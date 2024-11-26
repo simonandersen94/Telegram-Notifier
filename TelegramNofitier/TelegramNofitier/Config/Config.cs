@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace TelegramNofitier.Config {
     public class Config {
-        public string? RabbitMQ_Uri { get; set; }
-        public string? RabbitMQ_ClientProvidedName { get; set; }
-        public string? RabbitMQ_ExchangeName { get; set; }
-        public string? RabbitMQ_RoutingKey { get; set; }
-        public string? RabbitMQ_QueueName { get; set; }
+        public string RabbitMQ_Uri { get; set; }
+        public string RabbitMQ_ClientProvidedName { get; set; }
+        public string RabbitMQ_ExchangeName { get; set; }
+        public string RabbitMQ_RoutingKey { get; set; }
+        public string RabbitMQ_QueueName { get; set; }
 
         private static readonly string ConfigPath = Path.Combine(Directory.GetCurrentDirectory(), "Config/Config.json");
 
@@ -20,7 +20,8 @@ namespace TelegramNofitier.Config {
                 throw new FileNotFoundException($"Config file not found at: {ConfigPath}");
             }
             var json = File.ReadAllText(ConfigPath);
-            return JsonSerializer.Deserialize<Config>(json);
+            return JsonSerializer.Deserialize<Config>(json)
+                ?? throw new InvalidOperationException("Failed to deserialize config file");
         }
     }
 }
