@@ -6,5 +6,6 @@ using System.Threading.Tasks;
 
 namespace TelegramNofitier.RabbitMQ.Interfaces {
     public interface IMessageConsumer {
+        void StartConsuming();
     }
 }
