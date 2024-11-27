@@ -8,8 +8,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="BusinessLogic\" />
-    <Folder Include="Data\" />
     <Folder Include="Telegram\Interfaces\" />
   </ItemGroup>
 
