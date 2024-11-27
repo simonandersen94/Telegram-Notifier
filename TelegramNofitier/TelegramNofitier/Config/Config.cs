@@ -12,6 +12,8 @@ namespace TelegramNofitier.Config {
         public string RabbitMQ_ExchangeName { get; set; }
         public string RabbitMQ_RoutingKey { get; set; }
         public string RabbitMQ_QueueName { get; set; }
+        public string TelegramBotToken { get; set; }
+        public string ChatID { get; set; }
 
         private static readonly string ConfigPath = Path.Combine(Directory.GetCurrentDirectory(), "Config/Config.json");
 

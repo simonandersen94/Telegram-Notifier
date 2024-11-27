@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using TelegramNofitier.Config;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
+using TelegramNofitier.Telegram;
 
 namespace TelegramNofitier.RabbitMQ {
     public class RabbitMQService {
