@@ -8,17 +8,18 @@ using System.Threading.Tasks;
 using TelegramNofitier.Config;
 using TelegramNofitier.RabbitMQ.Interfaces;
 using TelegramNofitier.Telegram;
+using TelegramNofitier.Telegram.Interfaces;
 
 namespace TelegramNofitier.RabbitMQ {
     public class MessageConsumer : IMessageConsumer {
         private readonly RabbitMQService _rabbitMQService;
         private readonly Config.Config _config;
-        private readonly TelegramService _telegramService;
+        private readonly ITelegramSender _telegramSender;
 
-        public MessageConsumer(RabbitMQService rabbitMQService, Config.Config config, TelegramService telegramService) {
+        public MessageConsumer(RabbitMQService rabbitMQService, Config.Config config, ITelegramSender telegramSender) {
             _rabbitMQService = rabbitMQService;
             _config = config;
-            _telegramService = telegramService;
+            _telegramSender = telegramSender;
         }
 
         public void StartConsuming() {
@@ -37,7 +38,7 @@ namespace TelegramNofitier.RabbitMQ {
                 string message = Encoding.UTF8.GetString(body);
 
                 Console.WriteLine($"Message: {message}");
-                await _telegramService.SendMessageAsync(message);
+                await _telegramSender.SendMessage(message);
 
                 channel.BasicAck(args.DeliveryTag, false);
             };

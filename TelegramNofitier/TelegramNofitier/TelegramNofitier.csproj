@@ -8,9 +8,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="BusinessLogic\" />
-    <Folder Include="Data\" />
-    <Folder Include="Telegram\Interfaces\" />
+    <Compile Remove="BusinessLogic\**" />
+    <Compile Remove="Data\**" />
+    <EmbeddedResource Remove="BusinessLogic\**" />
+    <EmbeddedResource Remove="Data\**" />
+    <None Remove="BusinessLogic\**" />
+    <None Remove="Data\**" />
   </ItemGroup>
 
   <ItemGroup>
