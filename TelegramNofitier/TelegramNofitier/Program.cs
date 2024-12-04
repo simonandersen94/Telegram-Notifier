@@ -23,7 +23,14 @@ namespace TelegramNofitier {
 
             messageConsumer.StartConsuming();
 
-            Console.ReadLine();
+            var resetEvent = new ManualResetEvent(false);
+            Console.CancelKeyPress += (sender, eventArgs) => {
+                Console.WriteLine("Shutting down...");
+                eventArgs.Cancel = true;
+                resetEvent.Set();
+            };
+
+            resetEvent.WaitOne();
 
             rabbitMQService.Close();
         }
