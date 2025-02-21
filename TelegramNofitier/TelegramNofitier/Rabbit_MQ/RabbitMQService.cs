@@ -26,6 +26,10 @@ namespace TelegramNofitier.RabbitMQ {
             };
             _connection = factory.CreateConnection();
             _channel = _connection.CreateModel();
+
+            _channel.ExchangeDeclare(_config.RabbitMQ_ExchangeName, ExchangeType.Direct, true, false, null);
+            _channel.QueueDeclare(_config.RabbitMQ_QueueName, true, false, false, null);
+            _channel.QueueBind(_config.RabbitMQ_QueueName, _config.RabbitMQ_ExchangeName, _config.RabbitMQ_RoutingKey, null);
         }
 
         public IModel GetChannel() {

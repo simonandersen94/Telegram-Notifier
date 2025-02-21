@@ -25,10 +25,6 @@ namespace TelegramNofitier.RabbitMQ {
         public void StartConsuming() {
             IModel channel = _rabbitMQService.GetChannel();
 
-            channel.ExchangeDeclare(_config.RabbitMQ_ExchangeName, ExchangeType.Direct, true, false, null);
-            channel.QueueDeclare(_config.RabbitMQ_QueueName, true, false, false, null);
-            channel.QueueBind(_config.RabbitMQ_QueueName, _config.RabbitMQ_ExchangeName, _config.RabbitMQ_RoutingKey, null);
-
             channel.BasicQos(0, 1, false);
 
             var consumer = new EventingBasicConsumer(channel);
