@@ -23,6 +23,9 @@ namespace TelegramNofitier {
 
             messageConsumer.StartConsuming();
 
+            var telegramReceiver = new TelegramReceiver(config.TelegramBotToken, telegramSender);
+            Task.Run(() => telegramReceiver.StartReceiving());
+
             var resetEvent = new ManualResetEvent(false);
             Console.CancelKeyPress += (sender, eventArgs) => {
                 Console.WriteLine("Shutting down...");
