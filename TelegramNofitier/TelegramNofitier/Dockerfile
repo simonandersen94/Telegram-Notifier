@@ -17,4 +17,4 @@ FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 
-ENTRYPOINT ["dotnet", "TelegramNofitier.dll"]
+ENTRYPOINT ["dotnet", "TelegramNotifier.dll"]

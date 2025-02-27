@@ -46,7 +46,7 @@ namespace TelegramNofitier.Telegram
             Console.WriteLine($"Received message: {text}");
 
             if (text == "_temp") {
-                await _telegramSender.SendMessage("9 grader");
+                await _telegramSender.SendMessage("Temperatur i stuen: 9 grader");
             }
         }
 

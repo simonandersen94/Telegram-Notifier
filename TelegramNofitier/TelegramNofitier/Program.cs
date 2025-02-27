@@ -1,10 +1,11 @@
-﻿using TelegramNofitier.RabbitMQ;
-using TelegramNofitier.Config;
-using System;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
+using TelegramNofitier.Config;
+using TelegramNofitier.RabbitMQ;
+using TelegramNofitier.RabbitMQ.Interfaces;
 using TelegramNofitier.Telegram;
 using TelegramNofitier.Telegram.Interfaces;
-using TelegramNofitier.RabbitMQ.Interfaces;
 
 namespace TelegramNofitier {
     internal class Program {
@@ -13,29 +14,48 @@ namespace TelegramNofitier {
 
             var telegramService = new TelegramService(config);
             var botClient = telegramService.CreateBotClient();
-
             ITelegramSender telegramSender = new TelegramSender(botClient, config.ChatID);
 
-            var rabbitMQService = new RabbitMQService(config);
-            rabbitMQService.Connect();
+            var cancellationTokenSource = new CancellationTokenSource();
 
-            IMessageConsumer messageConsumer = new MessageConsumer(rabbitMQService, config, telegramSender);
+            var rabbitMQTask = Task.Run(async () => {
+                RabbitMQService? rabbitMQService = null;
+                IMessageConsumer? messageConsumer = null;
 
-            messageConsumer.StartConsuming();
+                while (!cancellationTokenSource.Token.IsCancellationRequested) {
+                    try {
+                        rabbitMQService = new RabbitMQService(config);
+                        rabbitMQService.Connect();
+
+                        messageConsumer = new MessageConsumer(rabbitMQService, config, telegramSender);
+                        messageConsumer.StartConsuming();
+
+                        Console.WriteLine("Now connected to RabbitMQ.");
+                        break;
+                    } catch (Exception e) {
+                        Console.WriteLine($"Error connecting to RabbitMQ: {e.Message}");
+                        await Task.Delay(5000, cancellationTokenSource.Token);
+                    }
+                }
+
+                cancellationTokenSource.Token.WaitHandle.WaitOne();
+
+                rabbitMQService?.Close();
+            });
 
             var telegramReceiver = new TelegramReceiver(config.TelegramBotToken, telegramSender);
-            Task.Run(() => telegramReceiver.StartReceiving());
+            Task.Run(() => telegramReceiver.StartReceiving(), cancellationTokenSource.Token);
 
             var resetEvent = new ManualResetEvent(false);
             Console.CancelKeyPress += (sender, eventArgs) => {
                 Console.WriteLine("Shutting down...");
                 eventArgs.Cancel = true;
+                cancellationTokenSource.Cancel();
                 resetEvent.Set();
             };
 
             resetEvent.WaitOne();
-
-            rabbitMQService.Close();
+            await rabbitMQTask;
         }
     }
 }
